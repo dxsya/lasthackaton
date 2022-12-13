@@ -30,7 +30,7 @@ const Sidebar = () => {
     const { getUsers, users } = useUsers();
     useEffect(() => {
         getUsers();
-    }, []);
+    }, [users]);
     const navigate = useNavigate();
     function checkSession(users) {
         return users.filter((item) => item.email == user.email);
@@ -42,7 +42,8 @@ const Sidebar = () => {
                 width: '20%',
                 backgroundColor: 'black',
                 color: 'white',
-                height: '100vh',
+                minHeight: 'max-content',
+
                 borderRight: '0.5px solid #aeaeae',
             }}
         >

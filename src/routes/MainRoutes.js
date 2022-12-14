@@ -16,7 +16,11 @@ const MainRoutes = () => {
         { link: '/profileEdit', element: <ProfileCreatePage />, id: 3 },
         { link: '/profile/:id', element: <ProfilePage />, id: 4 },
         { link: '/addContent/:id', element: <AddContentPage />, id: 5 },
-        { link: '/profile/:id/post/:id', element: <PostDetailsPage />, id: 6 },
+        {
+            link: '/profile/:id/post/:post_id',
+            element: <PostDetailsPage />,
+            id: 6,
+        },
         {
             link: '/profile/:id/post/edit/:id',
             element: <PostEditPage />,

@@ -26,7 +26,7 @@ const Post = ({ post, index }) => {
                 src={post.image}
                 width={250}
                 height={250}
-                onClick={() => navigate(`post/${index}`)}
+                onClick={() => navigate(`/profile/${id}/post/${index}`)}
             />
             {/* <Typography>{post.description}</Typography> */}
             {userInfo.email == user.email ? (

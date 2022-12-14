@@ -11,18 +11,21 @@ import Comment from './Comment';
 
 const PostDetails = () => {
     const { users, updateUser } = useUsers();
+    const { id, post_id } = useParams();
     const { user } = useAuth();
-    const { id } = useParams();
-    const userSession = users.find((oneUser) => oneUser.email === user.email);
-    const post = userSession?.posts[id];
+    const userSession = users.find((oneUser) => oneUser.id === id);
+    const userAuthorized = users.find(
+        (oneUser) => oneUser.email === user.email
+    );
+    const post = userSession?.posts[post_id];
 
     const [date, setDate] = useState('');
 
     const [comment, setComment] = useState({
         text: '',
-        nick: userSession?.nick,
+        nick: userAuthorized?.nick,
         date: date,
-        avatar: userSession?.avatar,
+        avatar: userAuthorized?.avatar,
     });
     const handleInp = (e) => {
         setDate(
@@ -33,7 +36,7 @@ const PostDetails = () => {
         let obj = {
             ...comment,
             [e.target.name]: e.target.value,
-            nick: userSession.nick,
+            nick: userAuthorized.nick,
             date: date,
         };
 
@@ -45,7 +48,7 @@ const PostDetails = () => {
         userSession.posts[id] = post;
         updateUser(userSession.id, userSession);
     }
-    console.log(post);
+    if (!post) return;
     return (
         <Box
             sx={{

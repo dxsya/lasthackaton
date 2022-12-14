@@ -30,7 +30,7 @@ const Sidebar = () => {
     const { getUsers, users } = useUsers();
     useEffect(() => {
         getUsers();
-    }, [users]);
+    }, []);
     const navigate = useNavigate();
     function checkSession(users) {
         return users.filter((item) => item.email == user.email);
@@ -39,76 +39,80 @@ const Sidebar = () => {
     return (
         <Box
             sx={{
-                width: '20%',
+                width: '18%',
                 backgroundColor: 'black',
                 color: 'white',
                 minHeight: 'max-content',
-
                 borderRight: '0.5px solid #aeaeae',
             }}
         >
-            <List>
-                {navigations.map((item, index) => (
-                    <Typography key={index} onClick={() => navigate(item.link)}>
-                        {item.name}
-                    </Typography>
-                ))}
-            </List>
-            <Typography
-                onClick={() =>
-                    navigate(`/addContent/${checkSession(users)[0].id}`)
-                }
-            >
-                создать
-            </Typography>
-            <Typography
-                onClick={() => {
-                    if (users.length) {
-                        navigate(`/profile/${checkSession(users)[0].id}`);
+            <Box sx={{ position: 'fixed' }}>
+                <List sx={{}}>
+                    {navigations.map((item, index) => (
+                        <Typography
+                            key={index}
+                            onClick={() => navigate(item.link)}
+                        >
+                            {item.name}
+                        </Typography>
+                    ))}
+                </List>
+                <Typography
+                    onClick={() =>
+                        navigate(`/addContent/${checkSession(users)[0]?.id}`)
                     }
-                }}
-            >
-                профиль
-            </Typography>
-            <ListItem
-                sx={{
-                    padding: {
-                        xs: '0 2px',
-                        sm: '0 4px',
-                        md: '0 8px',
-                        lg: '0 12px',
-                        xl: '0 14px',
-                    },
-                }}
-            >
-                {user ? (
-                    <Box
-                        onClick={handleLogout}
-                        sx={{
-                            cursor: 'pointer',
-                            width: '24px',
-                            height: '24px',
-                        }}
-                    >
-                        <LogoutOutlinedIcon sx={{ color: 'white' }} />
-                    </Box>
-                ) : (
-                    <Link to="/auth">
+                >
+                    создать
+                </Typography>
+                <Typography
+                    onClick={() => {
+                        if (users.length) {
+                            navigate(`/profile/${checkSession(users)[0]?.id}`);
+                        }
+                    }}
+                >
+                    профиль
+                </Typography>
+                <ListItem
+                    sx={{
+                        padding: {
+                            xs: '0 2px',
+                            sm: '0 4px',
+                            md: '0 8px',
+                            lg: '0 12px',
+                            xl: '0 14px',
+                        },
+                    }}
+                >
+                    {user ? (
                         <Box
-                            // onClick={}
+                            onClick={handleLogout}
                             sx={{
                                 cursor: 'pointer',
                                 width: '24px',
                                 height: '24px',
                             }}
                         >
-                            <PersonOutlineOutlinedIcon
-                                sx={{ color: 'white' }}
-                            />
+                            <LogoutOutlinedIcon sx={{ color: 'white' }} />
                         </Box>
-                    </Link>
-                )}
-            </ListItem>
+                    ) : (
+                        <Link to="/auth">
+                            <Box
+                                // onClick={}
+                                sx={{
+                                    cursor: 'pointer',
+                                    width: '24px',
+                                    height: '24px',
+                                }}
+                            >
+                                <PersonOutlineOutlinedIcon
+                                    sx={{ color: 'white' }}
+                                />
+                            </Box>
+                        </Link>
+                    )}
+                </ListItem>
+            </Box>
         </Box>
     );
 };

@@ -8,6 +8,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 const AddContent = () => {
     const [file, setFile] = useState('');
+    const [date, setDate] = useState('');
+
     const [uploadProgress, setUploadProgress] = useState(null);
     const [post, setPost] = useState({
         description: '',
@@ -16,6 +18,7 @@ const AddContent = () => {
         likes: [],
         comments: [],
         views: 0,
+        date: date,
     });
     const { userInfo, getUserInfo, updateUser } = useUsers();
     const { id } = useParams();
@@ -76,7 +79,12 @@ const AddContent = () => {
     }, [file]);
 
     const handleInp = (e) => {
-        let obj = { ...post, [e.target.name]: e.target.value };
+        setDate(
+            new Date().toLocaleTimeString() +
+                ' ' +
+                new Date().toLocaleDateString()
+        );
+        let obj = { ...post, [e.target.name]: e.target.value, date: date };
         setPost(obj);
     };
     // const [updatedUser, setUpdatedUser] = useState({ ...userInfo });
@@ -151,7 +159,7 @@ const AddContent = () => {
                     }}
                     name="image"
                 />
-                {uploadProgress < 100 || null ? (
+                {uploadProgress < 100 && uploadProgress != null ? (
                     <Button
                         sx={{
                             background: 'white',

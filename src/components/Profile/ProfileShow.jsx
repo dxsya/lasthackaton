@@ -63,7 +63,7 @@ const ProfileShow = () => {
 
     function checkFollow() {
         let splice = 0;
-        userSession?.followers.filter((follower, index) => {
+        userSession.followers?.filter((follower, index) => {
             if (follower.nick == userAuthorized.nick) {
                 if (index == 0) {
                     splice = -1;

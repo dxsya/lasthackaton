@@ -50,31 +50,6 @@ const ProfileEdit = () => {
                         >
                             {updatedUser?.nick}
                         </Typography>
-                        {user.email == updatedUser?.email ? (
-                            <Button
-                                sx={{
-                                    color: 'white',
-                                    border: '1px solid #aeaeae',
-                                    fontSize: '13px',
-                                    paddingX: 5,
-                                    height: '30px',
-                                }}
-                            >
-                                editprofile
-                            </Button>
-                        ) : (
-                            <Button
-                                sx={{
-                                    color: 'white',
-                                    border: '1px solid #aeaeae',
-                                    fontSize: '12px',
-                                    paddingX: 4,
-                                    height: '30px',
-                                }}
-                            >
-                                follow
-                            </Button>
-                        )}
                     </Box>
                     <Box
                         sx={{

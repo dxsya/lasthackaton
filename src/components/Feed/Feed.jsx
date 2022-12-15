@@ -1,28 +1,46 @@
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react';
-import { useAuth } from '../../contexts/AuthContextProvider';
+import React from 'react';
 import { useUsers } from '../../contexts/UsersContextProvider';
 import PostFeed from './PostFeed';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Feed = () => {
     const { users } = useUsers();
-    const allPosts = [];
-    const allPostsForShow = [];
-    users.map((item) => allPosts.push(item.posts));
-    function getAllPosts(posts) {
-        for (let post of posts) {
-            for (let onePost of post) {
-                allPostsForShow.push(onePost);
-            }
-        }
-    }
-    getAllPosts(allPosts);
+    users.filter((user) => user.email !== undefined);
+    console.log(users);
+
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
-            {allPostsForShow.map((post, index) => (
-                <PostFeed key={index} post={post} />
-            ))}
-        </Box>
+        <>
+            {users ? (
+                <Box
+                    sx={{
+                        backgroundColor: '#121212',
+                        minHeight: '100vh',
+                    }}
+                >
+                    <Box sx={{ width: '90%', margin: '0 auto', paddingY: 4 }}>
+                        {users.map((user, index) => {
+                            if (user.email == undefined) {
+                                return null;
+                            } else {
+                                return <PostFeed key={index} user={user} />;
+                            }
+                        })}
+                    </Box>
+                </Box>
+            ) : (
+                <Box sx={{ display: 'flex' }}>
+                    <CircularProgress
+                        sx={{
+                            color: 'white',
+                            position: 'absolute',
+                            top: '45%',
+                            left: '60%',
+                        }}
+                    />
+                </Box>
+            )}
+        </>
     );
 };
 

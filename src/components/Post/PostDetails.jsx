@@ -1,6 +1,6 @@
 import { Button, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContextProvider';
 import { useUsers } from '../../contexts/UsersContextProvider';
@@ -13,13 +13,19 @@ const PostDetails = () => {
     const { users, updateUser } = useUsers();
     const { id, post_id } = useParams();
     const { user } = useAuth();
+
     const userSession = users.find((oneUser) => oneUser.id === id);
+
     const userAuthorized = users.find(
         (oneUser) => oneUser.email === user.email
     );
+
     const post = userSession?.posts[post_id];
+
     const navigate = useNavigate();
+
     const [date, setDate] = useState('');
+
     const [comment, setComment] = useState({
         text: '',
         nick: userAuthorized?.nick,
@@ -27,6 +33,7 @@ const PostDetails = () => {
         avatar: userAuthorized?.avatar,
         id: userAuthorized?.id,
     });
+
     useEffect(() => {
         setComment({
             ...comment,
@@ -35,6 +42,53 @@ const PostDetails = () => {
             id: userAuthorized?.id,
         });
     }, [userAuthorized]);
+
+    const views = post?.views;
+    const refId = useRef(null);
+
+    async function addOneView() {
+        console.log(views);
+        // let postObj = { ...userSession?.posts[post_id], views: views + 1 };
+        // setPostView((prev) => ({
+        //     ...userSession.posts[post_id],
+        //     ...prev,
+        //     views: views + 1,
+        // }));
+        // if (refId) {
+        let userObj = { ...userSession };
+        userObj.posts?.splice(post_id, 1, {
+            ...userSession?.posts[post_id],
+            views: views + 1,
+        });
+        refId.current = userObj;
+        console.log(userObj);
+        // setUserNewView(userObj);
+        // setTimeout(() => {
+
+        // });
+        // }s
+
+        // console.log(postObj);
+        // console.log(postView);
+    }
+    // useEffect(() => {
+    //     if (userNewView) {
+    //         console.log(userNewView);
+    //         updateUser(id, userNewView);
+    //     }
+    // }, [userNewView]);
+
+    useEffect(() => {
+        return () => {
+            addOneView().then(() => {
+                if (refId) {
+                    updateUser(id, refId.current);
+                    console.log('UNMOUNT');
+                }
+            });
+        };
+    }, []);
+
     const handleInp = (e) => {
         setDate(
             new Date().toLocaleTimeString() +
@@ -105,7 +159,7 @@ const PostDetails = () => {
                         <Box
                             sx={{
                                 width: '55%',
-                                backgroundImage: `url(${post.image})`,
+                                backgroundImage: `url(${post?.image})`,
                                 height: '100%',
                                 backgroundRepeat: 'no-repeat',
                                 backgroundSize: '100% 100%',
@@ -148,13 +202,15 @@ const PostDetails = () => {
                                 sx={{
                                     padding: '10px',
                                     borderBottom: '0.5px solid #262627',
+                                    fontSize: '8px',
                                 }}
                             >
                                 <Typography
-                                    sx={{ fontSize: '11px', lineHeight: 1.2 }}
+                                    sx={{ fontSize: '12px', lineHeight: 1.2 }}
                                 >
-                                    {post.description}
+                                    {post?.description}
                                 </Typography>
+                                {post?.date}
                             </Box>
                             <Box
                                 sx={{
@@ -163,7 +219,7 @@ const PostDetails = () => {
                                     overflow: 'scroll',
                                 }}
                             >
-                                {post.comments?.map((comment, index) => (
+                                {post?.comments?.map((comment, index) => (
                                     <Comment
                                         key={index}
                                         comment={comment}
@@ -182,7 +238,7 @@ const PostDetails = () => {
                             >
                                 <FavoriteBorderIcon onClick={() => setLike()} />
                                 <Typography sx={{ marginRight: '15px' }}>
-                                    {post.likes.length}
+                                    {post?.likes?.length}
                                 </Typography>
                                 <BookmarkBorderIcon />
                             </Box>

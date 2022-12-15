@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../fire';
 import { useUsers } from '../../contexts/UsersContextProvider';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContextProvider';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -13,7 +13,7 @@ const PostEdit = () => {
     const { updateUser, users } = useUsers();
     const { user } = useAuth();
     const { id } = useParams();
-
+    const navigate = useNavigate();
     const userSession = users.find((oneUser) => oneUser.email === user.email);
     const [editedPost, setEditedPost] = useState({});
     useEffect(() => {
@@ -158,6 +158,7 @@ const PostEdit = () => {
                                 <Button
                                     onClick={() => {
                                         editPost(editedPost);
+                                        navigate(`/profile/${userSession.id}`);
                                     }}
                                     sx={{
                                         color: 'black',

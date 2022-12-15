@@ -59,6 +59,7 @@ const UsersContextProvider = ({ children }) => {
     }
 
     async function updateUser(id, updatedUser) {
+        console.log(id, updatedUser);
         const userDocRef = doc(db, 'users', id);
         await updateDoc(userDocRef, updatedUser);
         getUsers();

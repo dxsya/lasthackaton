@@ -17,7 +17,6 @@ const Feed = () => {
         }
     }
     getAllPosts(allPosts);
-    console.log(allPostsForShow);
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
             {allPostsForShow.map((post, index) => (

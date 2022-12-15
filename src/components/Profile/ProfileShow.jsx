@@ -1,6 +1,6 @@
 import { Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUsers } from '../../contexts/UsersContextProvider';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -8,13 +8,74 @@ import { useAuth } from '../../contexts/AuthContextProvider';
 import Post from '../Post/Post';
 
 const ProfileShow = () => {
-    const { userInfo, getUserInfo } = useUsers();
+    const { userInfo, getUserInfo, users, getUsers, updateUser } = useUsers();
     const { id } = useParams();
     const { user } = useAuth();
     const navigate = useNavigate();
     useEffect(() => {
+        getUsers();
+    }, []);
+    useEffect(() => {
         getUserInfo(id);
     }, [id]);
+    const userSession = users.find((oneUser) => oneUser.id === id);
+    const userAuthorized = users.find(
+        (oneUser) => oneUser.email === user.email
+    );
+    const [userToFollow, setUserToFollow] = useState({ ...userSession });
+    const [userWhoFollow, setUserWhoFollow] = useState({ ...userAuthorized });
+    useEffect(() => {
+        setUserToFollow(userSession);
+        setUserWhoFollow(userAuthorized);
+    }, [userSession, userAuthorized]);
+    //? FOLLOWS
+    function setFollow() {
+        const follower = {
+            nick: userAuthorized.nick,
+            avatar: userAuthorized.avatar,
+            id: userAuthorized.id,
+        };
+        const whosFollower = {
+            nick: userSession.nick,
+            avatar: userSession.avatar,
+            id: userSession.id,
+        };
+        if (userAuthorized.email == undefined) {
+            return;
+        }
+        if (checkFollow() == 0) {
+            userSession.followers.push(follower);
+            userAuthorized.follows.push(whosFollower);
+            setUserToFollow(userSession);
+            setUserWhoFollow(userAuthorized);
+        } else {
+            let splice = checkFollow();
+            userSession.followers.splice(splice, 1);
+            userAuthorized.follows.splice(splice, 1);
+            setUserToFollow(userSession);
+            setUserWhoFollow(userAuthorized);
+        }
+
+        updateUser(userSession.id, userToFollow);
+        updateUser(userAuthorized.id, userWhoFollow);
+        console.log(userToFollow, userWhoFollow);
+    }
+
+    function checkFollow() {
+        let splice = 0;
+        userSession?.followers.filter((follower, index) => {
+            if (follower.nick == userAuthorized.nick) {
+                if (index == 0) {
+                    splice = -1;
+                } else {
+                    splice = index;
+                }
+            }
+        });
+        return splice;
+    }
+
+    //? FOLLOWS
     return (
         <Box sx={{ backgroundColor: '#121212', height: '100vh' }}>
             {userInfo ? (
@@ -68,17 +129,40 @@ const ProfileShow = () => {
                                         editprofile
                                     </Button>
                                 ) : (
-                                    <Button
-                                        sx={{
-                                            color: 'white',
-                                            border: '1px solid #aeaeae',
-                                            fontSize: '12px',
-                                            paddingX: 4,
-                                            height: '30px',
-                                        }}
-                                    >
-                                        follow
-                                    </Button>
+                                    <>
+                                        {checkFollow() == 0 ? (
+                                            <>
+                                                {' '}
+                                                <Button
+                                                    sx={{
+                                                        color: 'white',
+                                                        border: '1px solid #aeaeae',
+                                                        fontSize: '12px',
+                                                        paddingX: 4,
+                                                        height: '30px',
+                                                    }}
+                                                    onClick={() => setFollow()}
+                                                >
+                                                    follow
+                                                </Button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Button
+                                                    sx={{
+                                                        color: 'white',
+                                                        border: '1px solid #aeaeae',
+                                                        fontSize: '12px',
+                                                        paddingX: 4,
+                                                        height: '30px',
+                                                    }}
+                                                    onClick={() => setFollow()}
+                                                >
+                                                    unfollow
+                                                </Button>
+                                            </>
+                                        )}
+                                    </>
                                 )}
                             </Box>
                             <Box
@@ -93,10 +177,10 @@ const ProfileShow = () => {
                                     {userInfo.posts.length} posts
                                 </Typography>
                                 <Typography>
-                                    {userInfo.followers} followers
+                                    {userSession.followers?.length} followers
                                 </Typography>
                                 <Typography>
-                                    {userInfo.follows} follows
+                                    {userInfo.follows?.length} follows
                                 </Typography>
                             </Box>
                             <Box>

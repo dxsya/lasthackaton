@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import fire from '../fire';
 
 const authContext = createContext();
@@ -17,11 +18,14 @@ const AuthContextProvider = ({ children }) => {
         setEmail('');
         setPassword('');
     };
-
+    const navigate = useNavigate();
     const handleRegister = () => {
         setErrorMsg('');
         fire.auth()
             .createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                navigate('/profileCreate');
+            })
             .catch((err) => {
                 switch (err.code) {
                     case 'auth/email-already-in-use':
@@ -39,6 +43,7 @@ const AuthContextProvider = ({ children }) => {
         setErrorMsg('');
         fire.auth()
             .signInWithEmailAndPassword(email, password)
+            .then(() => navigate('/'))
             .catch((err) => {
                 switch (err.code) {
                     case 'auth/user-disabled':

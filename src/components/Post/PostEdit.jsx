@@ -1,10 +1,11 @@
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../fire';
 import { useUsers } from '../../contexts/UsersContextProvider';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContextProvider';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const PostEdit = () => {
     const [file, setFile] = useState('');
@@ -18,7 +19,6 @@ const PostEdit = () => {
     useEffect(() => {
         setEditedPost(userSession?.posts[id]);
     }, [userSession]);
-    console.log(userSession, editedPost);
 
     useEffect(() => {
         const uploadFile = () => {
@@ -83,44 +83,107 @@ const PostEdit = () => {
         userSession.posts = posts;
         updateUser(userSession.id, userSession);
     }
-
     return (
-        <Box sx={{ backgroundColor: '#262627', minHeight: '100vh' }}>
-            <Box
-                sx={{ display: 'flex', flexDirection: 'column', width: '50%' }}
-            >
-                <TextField
-                    type="text"
-                    placeholder="price"
-                    sx={{ background: 'white' }}
-                    onChange={handleInp}
-                    name="price"
-                    value={editedPost?.price || ``}
-                />
-                <TextField
-                    type="text"
-                    placeholder="descr"
-                    sx={{ background: 'white' }}
-                    onChange={handleInp}
-                    name="description"
-                    value={editedPost?.description || ``}
-                />
-                <TextField
-                    onChange={(e) => setFile(e.target.files[0])}
-                    type="file"
-                    sx={{ background: 'white' }}
-                    name="image"
-                />
-                <Button
-                    onClick={() => {
-                        editPost(editedPost);
-                        console.log(editedPost);
+        <>
+            <Box sx={{ backgroundColor: '#121212', minHeight: '100vh' }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '50%',
+                        margin: '0 auto',
+                        color: 'white',
+                        display: 'flex',
+                        paddingY: 2,
                     }}
                 >
-                    edit post
-                </Button>
+                    {editedPost ? (
+                        <>
+                            <Box
+                                sx={{
+                                    textAlign: 'center',
+                                    border: '0.5px solid #262627',
+                                    padding: 1,
+                                    margin: 1,
+                                }}
+                            >
+                                <img
+                                    src={editedPost?.image}
+                                    alt=""
+                                    width={'300px'}
+                                    height={'300px'}
+                                />
+                                <Typography>
+                                    {editedPost?.description}
+                                </Typography>
+                                <Typography>{editedPost?.price}$</Typography>
+                            </Box>
+                            <TextField
+                                type="text"
+                                placeholder="price"
+                                sx={{ background: 'white', m: 1 }}
+                                onChange={handleInp}
+                                name="price"
+                                value={editedPost?.price || ``}
+                            />
+                            <TextField
+                                type="text"
+                                placeholder="descr"
+                                sx={{ background: 'white', m: 1 }}
+                                onChange={handleInp}
+                                name="description"
+                                value={editedPost?.description || ``}
+                            />
+                            <TextField
+                                onChange={(e) => setFile(e.target.files[0])}
+                                type="file"
+                                sx={{ background: 'white', m: 1 }}
+                                name="image"
+                            />
+                            {uploadProgress < 100 && null ? (
+                                <Button
+                                    onClick={() => {
+                                        editPost(editedPost);
+                                    }}
+                                    sx={{
+                                        color: 'black',
+                                        backgroundColor: 'white',
+                                        m: 1,
+                                    }}
+                                    disabled
+                                >
+                                    edit post
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={() => {
+                                        editPost(editedPost);
+                                    }}
+                                    sx={{
+                                        color: 'black',
+                                        backgroundColor: 'white',
+                                        m: 1,
+                                    }}
+                                >
+                                    edit post
+                                </Button>
+                            )}
+                        </>
+                    ) : (
+                        <Box sx={{ display: 'flex' }}>
+                            <CircularProgress
+                                sx={{
+                                    color: 'white',
+                                    position: 'absolute',
+                                    top: '45%',
+                                    left: '60%',
+                                }}
+                            />
+                        </Box>
+                    )}
+                </Box>
             </Box>
-        </Box>
+        </>
     );
 };
 

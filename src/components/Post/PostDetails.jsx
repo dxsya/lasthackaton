@@ -1,7 +1,7 @@
 import { Button, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContextProvider';
 import { useUsers } from '../../contexts/UsersContextProvider';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -18,15 +18,23 @@ const PostDetails = () => {
         (oneUser) => oneUser.email === user.email
     );
     const post = userSession?.posts[post_id];
-
+    const navigate = useNavigate();
     const [date, setDate] = useState('');
-
     const [comment, setComment] = useState({
         text: '',
         nick: userAuthorized?.nick,
         date: date,
         avatar: userAuthorized?.avatar,
+        id: userAuthorized?.id,
     });
+    useEffect(() => {
+        setComment({
+            ...comment,
+            nick: userAuthorized?.nick,
+            avatar: userAuthorized?.avatar,
+            id: userAuthorized?.id,
+        });
+    }, [userAuthorized]);
     const handleInp = (e) => {
         setDate(
             new Date().toLocaleTimeString() +
@@ -42,13 +50,38 @@ const PostDetails = () => {
 
         setComment(obj);
     };
-
+    function checkLike(post) {
+        let slice = 0;
+        post?.likes.filter((like, index) => {
+            if (like == userAuthorized.nick) {
+                if (index == 0) {
+                    slice = -1;
+                } else {
+                    slice = index;
+                }
+            }
+        });
+        return slice;
+    }
+    function setLike() {
+        if (user.email == undefined) {
+            return;
+        }
+        if (checkLike(post) == 0) {
+            post.likes.push(userAuthorized.nick);
+        } else {
+            let splice = checkLike(post);
+            post.likes.splice(splice, 1);
+        }
+        userSession.posts[post_id] = post;
+        updateUser(userSession.id, userSession);
+    }
     function addComment(comment) {
         post.comments.push(comment);
         userSession.posts[id] = post;
         updateUser(userSession.id, userSession);
     }
-    if (!post) return;
+
     return (
         <Box
             sx={{
@@ -83,6 +116,7 @@ const PostDetails = () => {
                             sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
+                                justifyContent: 'space-around',
                                 width: '45%',
                                 color: 'white',
                             }}
@@ -97,6 +131,9 @@ const PostDetails = () => {
                                 }}
                             >
                                 <img
+                                    onClick={() =>
+                                        navigate(`/profile/${userSession?.id}`)
+                                    }
                                     src={userSession?.avatar}
                                     alt="avatar"
                                     width={'50px'}
@@ -127,16 +164,26 @@ const PostDetails = () => {
                                 }}
                             >
                                 {post.comments?.map((comment, index) => (
-                                    <Comment key={index} comment={comment} />
+                                    <Comment
+                                        key={index}
+                                        comment={comment}
+                                        id={index}
+                                        post={post}
+                                        userSession={userSession}
+                                    />
                                 ))}
                             </Box>
                             <Box
                                 sx={{
                                     padding: '10px',
                                     borderBottom: '0.5px solid #262627',
+                                    display: 'flex',
                                 }}
                             >
-                                <FavoriteBorderIcon />
+                                <FavoriteBorderIcon onClick={() => setLike()} />
+                                <Typography sx={{ marginRight: '15px' }}>
+                                    {post.likes.length}
+                                </Typography>
                                 <BookmarkBorderIcon />
                             </Box>
                             <Box sx={{ display: 'flex' }}>
@@ -156,10 +203,15 @@ const PostDetails = () => {
                                                 border: 'none',
                                             },
                                         },
+                                        width: '65%',
                                     }}
                                 />
                                 <Button
-                                    sx={{ fontSize: '11px', color: 'white' }}
+                                    sx={{
+                                        fontSize: '11px',
+                                        color: 'white',
+                                        width: '35%',
+                                    }}
                                     onClick={() => addComment(comment)}
                                 >
                                     Опубликовать

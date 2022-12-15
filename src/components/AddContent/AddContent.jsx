@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../fire';
 import { useUsers } from '../../contexts/UsersContextProvider';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const AddContent = () => {
     const [file, setFile] = useState('');
@@ -18,6 +19,7 @@ const AddContent = () => {
     });
     const { userInfo, getUserInfo, updateUser } = useUsers();
     const { id } = useParams();
+    const navigate = useNavigate();
     useEffect(() => {
         getUserInfo(id);
     }, []);
@@ -88,7 +90,7 @@ const AddContent = () => {
     return (
         <Box
             sx={{
-                backgroundColor: '#262627',
+                backgroundColor: '#121212',
                 height: '100vh',
             }}
         >
@@ -109,6 +111,11 @@ const AddContent = () => {
                         background: 'white',
                         width: '60%',
                         margin: '2% auto',
+                        '& .MuiOutlinedInput-root': {
+                            '&.Mui-focused fieldset': {
+                                border: 'none',
+                            },
+                        },
                     }}
                     onChange={handleInp}
                     name="price"
@@ -120,6 +127,11 @@ const AddContent = () => {
                         background: 'white',
                         width: '60%',
                         margin: '2% auto',
+                        '& .MuiOutlinedInput-root': {
+                            '&.Mui-focused fieldset': {
+                                border: 'none',
+                            },
+                        },
                     }}
                     onChange={handleInp}
                     name="description"
@@ -131,10 +143,45 @@ const AddContent = () => {
                         background: 'white',
                         width: '60%',
                         margin: '2% auto',
+                        '& .MuiOutlinedInput-root': {
+                            '&.Mui-focused fieldset': {
+                                border: 'none',
+                            },
+                        },
                     }}
                     name="image"
                 />
-                <Button onClick={() => addPost(post)}>add post</Button>
+                {uploadProgress < 100 || null ? (
+                    <Button
+                        sx={{
+                            background: 'white',
+                            width: '60%',
+                            margin: '2% auto',
+                            color: 'black',
+                        }}
+                    >
+                        <CircularProgress
+                            sx={{
+                                color: 'black',
+                            }}
+                        />
+                    </Button>
+                ) : (
+                    <Button
+                        sx={{
+                            background: 'white',
+                            width: '60%',
+                            margin: '2% auto',
+                            color: 'black',
+                        }}
+                        onClick={() => {
+                            addPost(post);
+                            navigate(`/profile/${id}`);
+                        }}
+                    >
+                        add post
+                    </Button>
+                )}
             </Box>
         </Box>
     );

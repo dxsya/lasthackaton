@@ -28,14 +28,15 @@ const navigations = [
 const Sidebar = () => {
     const { handleLogout, user } = useAuth();
     const { getUsers, users } = useUsers();
+
+    const navigate = useNavigate();
+
     useEffect(() => {
         getUsers();
     }, []);
-    const navigate = useNavigate();
-    function checkSession(users) {
-        return users.filter((item) => item.email == user.email);
-    }
-
+    const userAuthorized = users.find(
+        (oneUser) => oneUser.email === user.email
+    );
     return (
         <Box
             sx={{
@@ -57,22 +58,29 @@ const Sidebar = () => {
                         </Typography>
                     ))}
                 </List>
-                <Typography
-                    onClick={() =>
-                        navigate(`/addContent/${checkSession(users)[0]?.id}`)
-                    }
-                >
-                    создать
-                </Typography>
-                <Typography
-                    onClick={() => {
-                        if (users.length) {
-                            navigate(`/profile/${checkSession(users)[0]?.id}`);
-                        }
-                    }}
-                >
-                    профиль
-                </Typography>
+
+                {user.email != undefined ? (
+                    <>
+                        <Typography
+                            onClick={() =>
+                                navigate(`/addContent/${userAuthorized?.id}`)
+                            }
+                        >
+                            создать
+                        </Typography>
+                        <Typography
+                            onClick={() => {
+                                if (users.length) {
+                                    navigate(`/profile/${userAuthorized?.id}`);
+                                }
+                            }}
+                        >
+                            профиль
+                        </Typography>
+                    </>
+                ) : (
+                    <></>
+                )}
                 <ListItem
                     sx={{
                         padding: {

@@ -29,12 +29,7 @@ export default function Auth() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
     };
-
     return (
         <>
             <Box
@@ -77,7 +72,6 @@ export default function Auth() {
                             Почта
                         </Typography>
                         <TextField
-                            className="input-email"
                             required
                             fullWidth
                             id="email"
@@ -88,6 +82,7 @@ export default function Auth() {
                             onChange={(e) => {
                                 setEmail(e.target.value);
                             }}
+                            sx={{ background: 'white', color: 'black' }}
                         />
 
                         <Box sx={{ mt: 2 }}>
@@ -95,7 +90,6 @@ export default function Auth() {
                                 Пароль
                             </Typography>
                             <TextField
-                                className="input-password"
                                 required
                                 fullWidth
                                 name="password"
@@ -107,7 +101,7 @@ export default function Auth() {
                                 onChange={(e) => {
                                     setPassword(e.target.value);
                                 }}
-                                sx={{ borderRadius: '0' }}
+                                sx={{ background: 'white', color: 'black' }}
                             />
                         </Box>
 
@@ -127,13 +121,12 @@ export default function Auth() {
                                 sx={{
                                     mt: 3,
                                     fontWeight: 600,
-                                    backgroundColor: '#0c6',
+                                    backgroundColor: 'white',
                                     height: '55px',
                                     marginBottom: '20px',
                                 }}
                                 onClick={() => {
                                     handleLogin();
-                                    navigate('/');
                                 }}
                             >
                                 Войти
@@ -147,13 +140,12 @@ export default function Auth() {
                                 sx={{
                                     mt: 3,
                                     fontWeight: 600,
-                                    backgroundColor: '#0c6',
+                                    backgroundColor: '#white',
                                     height: '55px',
                                     marginBottom: '20px',
                                 }}
                                 onClick={() => {
                                     handleRegister();
-                                    navigate('/profileEdit');
                                 }}
                             >
                                 Зарегистрироваться

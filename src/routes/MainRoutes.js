@@ -13,7 +13,7 @@ const MainRoutes = () => {
     const PUBLIC_ROUTES = [
         { link: '/', element: <FeedPage />, id: 1 },
         { link: '/auth', element: <AuthPage />, id: 2 },
-        { link: '/profileEdit', element: <ProfileCreatePage />, id: 3 },
+        { link: '/profileCreate', element: <ProfileCreatePage />, id: 3 },
         { link: '/profile/:id', element: <ProfilePage />, id: 4 },
         { link: '/addContent/:id', element: <AddContentPage />, id: 5 },
         {

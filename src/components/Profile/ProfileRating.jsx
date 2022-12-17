@@ -62,7 +62,7 @@ export default function ProfileRating() {
                 )}
             </Stack>
             <Typography sx={{ color: 'black' }}>
-                {calcAverageRating(userSession?.rating)}
+                {calcAverageRating(userSession?.rating)}☆
             </Typography>
         </Box>
     );

@@ -7,6 +7,10 @@ import {
     getDoc,
     updateDoc,
     deleteDoc,
+    where,
+    query,
+    orderBy,
+    startAt,
 } from 'firebase/firestore';
 import { db } from '../fire';
 import { ACTIONS } from '../helpers/consts';
@@ -35,8 +39,19 @@ const UsersContextProvider = ({ children }) => {
 
     const usersCollectionRef = collection(db, 'users');
 
-    async function getUsers() {
+    async function getUsers(qRef) {
+        const q = query(
+            usersCollectionRef,
+            // where('nick', '==', 'dosya')
+            // where('email', '==', 'dxd@gmail.com'),
+            // where('description', '==', '0nlyT35Td')
+            orderBy('price', 'desc')
+        );
         const data = await getDocs(usersCollectionRef);
+        // const data2 = await getDocs(q);
+        // console.log(
+        //     data2.docs.map((item) => ({ ...item.data(), id: item.id }))
+        // );
 
         dispatch({
             type: ACTIONS.GET_USERS,
@@ -59,7 +74,6 @@ const UsersContextProvider = ({ children }) => {
     }
 
     async function updateUser(id, updatedUser) {
-        console.log(id, updatedUser);
         const userDocRef = doc(db, 'users', id);
         await updateDoc(userDocRef, updatedUser);
         getUsers();

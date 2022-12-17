@@ -6,6 +6,9 @@ import { useUsers } from '../../contexts/UsersContextProvider';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useAuth } from '../../contexts/AuthContextProvider';
 import Post from '../Post/Post';
+import Followers from './Followers';
+import Follows from './Follows';
+import ProfileRating from './ProfileRating';
 
 const ProfileShow = () => {
     const { userInfo, getUserInfo, users, getUsers, updateUser } = useUsers();
@@ -58,12 +61,11 @@ const ProfileShow = () => {
 
         updateUser(userSession.id, userToFollow);
         updateUser(userAuthorized.id, userWhoFollow);
-        console.log(userToFollow, userWhoFollow);
     }
 
     function checkFollow() {
         let splice = 0;
-        userSession.followers?.filter((follower, index) => {
+        userSession?.followers?.filter((follower, index) => {
             if (follower.nick == userAuthorized.nick) {
                 if (index == 0) {
                     splice = -1;
@@ -74,7 +76,6 @@ const ProfileShow = () => {
         });
         return splice;
     }
-
     //? FOLLOWS
     return (
         <Box sx={{ backgroundColor: '#121212', height: '100vh' }}>
@@ -176,15 +177,25 @@ const ProfileShow = () => {
                                 <Typography>
                                     {userInfo.posts.length} posts
                                 </Typography>
-                                <Typography>
-                                    {userSession.followers?.length} followers
-                                </Typography>
-                                <Typography>
-                                    {userInfo.follows?.length} follows
-                                </Typography>
+                                <Box sx={{ display: 'flex' }}>
+                                    <Typography sx={{ marginRight: '4px' }}>
+                                        {userSession?.followers?.length}
+                                    </Typography>
+                                    <Followers followers={userInfo.followers} />
+                                </Box>
+                                <Box sx={{ display: 'flex' }}>
+                                    <Typography sx={{ marginRight: '4px' }}>
+                                        {userSession?.follows?.length}
+                                    </Typography>
+                                    <Follows follows={userInfo.follows} />
+                                </Box>
                             </Box>
                             <Box>
                                 <Typography>{userInfo.description}</Typography>
+                                <ProfileRating
+                                    userAuthorized={userAuthorized}
+                                    userSession={userSession}
+                                />
                             </Box>
                         </Box>
                     </Box>
@@ -198,6 +209,8 @@ const ProfileShow = () => {
                             pt: 5,
                             borderTop: '0.01em solid #aeaeae',
                             display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'space-around',
                         }}
                     >
                         {userInfo.posts.map((post, index) => (

@@ -7,7 +7,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 const Feed = () => {
     const { users } = useUsers();
     users.filter((user) => user.email !== undefined);
-    console.log(users);
 
     return (
         <>

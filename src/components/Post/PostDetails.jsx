@@ -7,13 +7,20 @@ import { useUsers } from '../../contexts/UsersContextProvider';
 import CircularProgress from '@mui/material/CircularProgress';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Comment from './Comment';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useCart } from '../../contexts/CartContextProvider';
+import { useWish } from '../../contexts/WishContextProvider';
 
 const PostDetails = () => {
     const { users, updateUser } = useUsers();
     const { id, post_id } = useParams();
     const { user } = useAuth();
-
+    const { addProductToCart, checkProductInCart } = useCart();
+    const { addProductToWish, checkProductInWish } = useWish();
     const userSession = users.find((oneUser) => oneUser.id === id);
 
     const userAuthorized = users.find(
@@ -47,7 +54,7 @@ const PostDetails = () => {
     const refId = useRef(null);
 
     async function addOneView() {
-        console.log(views);
+        // console.log(views);
         // let postObj = { ...userSession?.posts[post_id], views: views + 1 };
         // setPostView((prev) => ({
         //     ...userSession.posts[post_id],
@@ -61,7 +68,7 @@ const PostDetails = () => {
             views: views + 1,
         });
         refId.current = userObj;
-        console.log(userObj);
+        // console.log(userObj);
         // setUserNewView(userObj);
         // setTimeout(() => {
 
@@ -81,10 +88,7 @@ const PostDetails = () => {
     useEffect(() => {
         return () => {
             addOneView().then(() => {
-                if (refId) {
-                    updateUser(id, refId.current);
-                    console.log('UNMOUNT');
-                }
+                updateUser(id, refId.current);
             });
         };
     }, []);
@@ -135,7 +139,8 @@ const PostDetails = () => {
         userSession.posts[id] = post;
         updateUser(userSession.id, userSession);
     }
-
+    const postForCart = { ...post, id: `${id}_${post_id}` };
+    console.log(postForCart);
     return (
         <Box
             sx={{
@@ -240,7 +245,38 @@ const PostDetails = () => {
                                 <Typography sx={{ marginRight: '15px' }}>
                                     {post?.likes?.length}
                                 </Typography>
-                                <BookmarkBorderIcon />
+                                <VisibilityOutlinedIcon />
+                                <Typography sx={{ marginRight: '15px' }}>
+                                    {post?.views}
+                                </Typography>
+                                {checkProductInWish(postForCart.id) ? (
+                                    <BookmarkIcon
+                                        onClick={() => {
+                                            addProductToWish(postForCart);
+                                        }}
+                                    />
+                                ) : (
+                                    <BookmarkBorderIcon
+                                        onClick={() => {
+                                            addProductToWish(postForCart);
+                                        }}
+                                    />
+                                )}
+                                {checkProductInCart(postForCart.id) ? (
+                                    <ShoppingCartIcon
+                                        sx={{ ml: 1 }}
+                                        onClick={() => {
+                                            addProductToCart(postForCart);
+                                        }}
+                                    />
+                                ) : (
+                                    <ShoppingCartOutlinedIcon
+                                        sx={{ ml: 1 }}
+                                        onClick={() => {
+                                            addProductToCart(postForCart);
+                                        }}
+                                    />
+                                )}
                             </Box>
                             <Box sx={{ display: 'flex' }}>
                                 <TextField

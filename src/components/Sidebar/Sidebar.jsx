@@ -5,6 +5,8 @@ import { useAuth } from '../../contexts/AuthContextProvider';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { useUsers } from '../../contexts/UsersContextProvider';
+import BookmarkTwoToneIcon from '@mui/icons-material/BookmarkTwoTone';
+import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
 
 const navigations = [
     {
@@ -77,6 +79,12 @@ const Sidebar = () => {
                         >
                             профиль
                         </Typography>
+                        <ShoppingCartTwoToneIcon
+                            onClick={() => navigate('/cart')}
+                        />
+                        <BookmarkTwoToneIcon
+                            onClick={() => navigate('/wish')}
+                        />
                     </>
                 ) : (
                     <></>

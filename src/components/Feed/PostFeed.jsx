@@ -16,12 +16,22 @@ const PostFeed = ({ user }) => {
             onClick={() => navigate(`/profile/${user.id}`)}
         >
             <img src={user.avatar} alt="" width={'150px'} />
-            <Box sx={{ padding: 2 }}>
+            <Box sx={{ padding: 2, width: '60%' }}>
                 <Typography sx={{ fontSize: '1.5em' }}>{user.nick}</Typography>
-                <Typography>{user.description}</Typography>
-                <Typography>{user.email}</Typography>
-                <Typography>{user.posts.length} posts</Typography>
-                <Typography>{user.rating?.length} rating</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Box>
+                        <Typography>{user.description}</Typography>
+                        <Typography>{user.email}</Typography>
+                        <Typography>{user.posts.length} posts</Typography>
+                    </Box>
+                    <Box>
+                        <Typography>{user.rating?.length} rating</Typography>
+                        <Typography>
+                            {user.followers?.length} followers
+                        </Typography>
+                        <Typography>{user.follows?.length} follows</Typography>
+                    </Box>
+                </Box>
             </Box>
         </Box>
     );

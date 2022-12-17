@@ -2,12 +2,14 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AddContentPage from '../pages/AddContentPage';
 import AuthPage from '../pages/AuthPage';
+import CartPage from '../pages/CartPage';
 import FeedPage from '../pages/FeedPage';
 import PostDetailsPage from '../pages/PostDetailsPage';
 import PostEditPage from '../pages/PostEditPage';
 import ProfileCreatePage from '../pages/ProfileCreatePage';
 import ProfileEditPage from '../pages/ProfileEditPage';
 import ProfilePage from '../pages/ProfilePage';
+import WishPage from '../pages/WishPage';
 
 const MainRoutes = () => {
     const PUBLIC_ROUTES = [
@@ -29,7 +31,17 @@ const MainRoutes = () => {
         {
             link: '/profile/:id/editProfile',
             element: <ProfileEditPage />,
-            id: 7,
+            id: 8,
+        },
+        {
+            link: '/wish',
+            element: <WishPage />,
+            id: 9,
+        },
+        {
+            link: '/cart',
+            element: <CartPage />,
+            id: 10,
         },
     ];
     return (

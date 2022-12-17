@@ -25,8 +25,9 @@ const Comment = ({ comment, id, post, userSession }) => {
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    width: '30%',
+                    width: '100%',
                     padding: 1,
+                    justifyContent: 'space-between',
                 }}
             >
                 <img
@@ -45,7 +46,9 @@ const Comment = ({ comment, id, post, userSession }) => {
                         {comment.date}
                     </Typography>
                 </Box>
-                <Typography sx={{ pl: 2 }}>{comment.text}</Typography>
+                <Typography sx={{ pl: 2, width: '50%' }}>
+                    {comment.text}
+                </Typography>
             </Box>
 
             {userAuthorized.nick == comment.nick ? (

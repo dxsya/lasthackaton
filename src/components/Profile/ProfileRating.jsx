@@ -6,9 +6,13 @@ import { useUsers } from '../../contexts/UsersContextProvider';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContextProvider';
 import { calcAverageRating } from '../../helpers/functions';
-import { Typography } from '@mui/material';
-
+import { Button, Typography } from '@mui/material';
+import Modal from '@mui/material/Modal';
+import StarHalfIcon from '@mui/icons-material/StarHalf';
 export default function ProfileRating() {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const { updateUser, users, getUsers, getUserInfo } = useUsers();
     const { user } = useAuth();
     const { id } = useParams();
@@ -29,9 +33,10 @@ export default function ProfileRating() {
         let obj = { ...userSession };
         obj.rating.push(newRating);
         setUserRating(obj);
+    };
+    const handleClick = () => {
         updateUser(id, userRating);
     };
-
     function checkRating() {
         let obj = userSession?.rating?.filter(
             (item) => item.user == userAuthorized.nick
@@ -39,31 +44,109 @@ export default function ProfileRating() {
         return obj.length;
     }
     let checkRatingUser = checkRating();
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 240,
+        bgcolor: 'white',
+        border: '2px solid #aeaeae',
+        boxShadow: 24,
+        p: 4,
+    };
+
     return (
-        <Box sx={{ backgroundColor: 'white', width: '40%', display: 'flex' }}>
-            <Stack spacing={1}>
-                {checkRatingUser == 0 ? (
-                    <Rating
-                        sx={{ margin: '0 auto' }}
-                        name="half-rating"
-                        defaultValue={calcAverageRating(userSession?.rating)}
-                        precision={0.1}
-                        onChange={(e) => handleRating(e)}
-                    />
-                ) : (
-                    <Rating
-                        sx={{ margin: '0 auto' }}
-                        name="half-rating"
-                        defaultValue={calcAverageRating(userSession?.rating)}
-                        precision={0.1}
-                        onChange={(e) => handleRating(e)}
-                        readOnly
-                    />
-                )}
-            </Stack>
-            <Typography sx={{ color: 'black' }}>
-                {calcAverageRating(userSession?.rating)}☆
-            </Typography>
-        </Box>
+        <div>
+            <Box onClick={handleOpen} sx={{ display: 'flex', mt: 1 }}>
+                <Typography sx={{ mr: '5px' }}>
+                    {calcAverageRating(userSession?.rating)}
+                </Typography>
+                <StarHalfIcon />
+            </Box>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography sx={{ mb: 2, fontWeight: 600 }}>
+                        RATE AUTHOR
+                    </Typography>
+                    <Box
+                        sx={{
+                            backgroundColor: 'white',
+                            display: 'flex',
+                        }}
+                    >
+                        {' '}
+                        <Stack spacing={1}>
+                            {checkRatingUser == 0 ? (
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    }}
+                                >
+                                    <Rating
+                                        sx={{ margin: '0 auto' }}
+                                        name="size-large"
+                                        defaultValue={
+                                            calcAverageRating(
+                                                userSession?.rating
+                                            ) || 0
+                                        }
+                                        precision={0.1}
+                                        onChange={(e) => handleRating(e)}
+                                    />
+                                    <Button
+                                        onClick={() => handleClick()}
+                                        sx={{
+                                            color: 'black',
+                                            border: '0.5x solid #262627',
+                                            ml: 2,
+                                        }}
+                                    >
+                                        rate
+                                    </Button>
+                                </Box>
+                            ) : (
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    }}
+                                >
+                                    <Rating
+                                        sx={{ margin: '0 auto' }}
+                                        name="half-rating"
+                                        defaultValue={
+                                            calcAverageRating(
+                                                userSession?.rating
+                                            ) || 0
+                                        }
+                                        precision={0.1}
+                                        readOnly
+                                    />
+                                    <Button
+                                        sx={{
+                                            color: 'black',
+                                            border: '0.5px solid #262627',
+                                            ml: 2,
+                                        }}
+                                        onClick={() => handleClick()}
+                                    >
+                                        rate
+                                    </Button>
+                                </Box>
+                            )}
+                        </Stack>
+                    </Box>
+                </Box>
+            </Modal>
+        </div>
     );
 }

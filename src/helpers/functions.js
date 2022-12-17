@@ -14,5 +14,9 @@ export const calcAverageRating = (rating) => {
     let avg = rating.reduce((acc, curr) => {
         return acc + +curr.rating;
     }, 0);
-    return avg / rating.length;
+    if (rating.length == 0) {
+        return 0;
+    } else {
+        return avg / rating.length;
+    }
 };

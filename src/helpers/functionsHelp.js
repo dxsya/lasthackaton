@@ -3,11 +3,9 @@ export function getProductCountInCart() {
     return cart ? cart.posts.length : 0;
 }
 
-export const calcSubPrice = (post) => +post.count * post.item.price;
-
 export const calcTotalPrice = (posts) => {
     return posts.reduce((acc, curr) => {
-        return acc + curr.subPrice;
+        return acc + +curr.price;
     }, 0);
 };
 export const calcAverageRating = (rating) => {

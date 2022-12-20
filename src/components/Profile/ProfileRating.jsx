@@ -5,7 +5,7 @@ import { Box } from '@mui/system';
 import { useUsers } from '../../contexts/UsersContextProvider';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContextProvider';
-import { calcAverageRating } from '../../helpers/functions';
+import { calcAverageRating } from '../../helpers/functionsHelp';
 import { Button, Typography } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
@@ -137,7 +137,10 @@ export default function ProfileRating() {
                                             border: '0.5px solid #262627',
                                             ml: 2,
                                         }}
-                                        onClick={() => handleClick()}
+                                        onClick={() => {
+                                            handleClick();
+                                            handleClose();
+                                        }}
                                     >
                                         rate
                                     </Button>

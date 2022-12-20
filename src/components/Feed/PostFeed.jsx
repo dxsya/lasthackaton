@@ -1,6 +1,8 @@
-import { Box, ratingClasses, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { calcAverageRating } from '../../helpers/functionsHelp';
+import StarHalfIcon from '@mui/icons-material/StarHalf';
 
 const PostFeed = ({ user }) => {
     const navigate = useNavigate();
@@ -25,7 +27,9 @@ const PostFeed = ({ user }) => {
                         <Typography>{user.posts.length} posts</Typography>
                     </Box>
                     <Box>
-                        <Typography>{user.rating?.length} rating</Typography>
+                        <Typography>
+                            {calcAverageRating(user.rating)} <StarHalfIcon />
+                        </Typography>
                         <Typography>
                             {user.followers?.length} followers
                         </Typography>

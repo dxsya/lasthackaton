@@ -14,6 +14,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useCart } from '../../contexts/CartContextProvider';
 import { useWish } from '../../contexts/WishContextProvider';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
 const PostDetails = () => {
     const { users, updateUser } = useUsers();
@@ -150,6 +151,17 @@ const PostDetails = () => {
                 paddingTop: 8,
             }}
         >
+            <Typography
+                sx={{
+                    color: 'white',
+                    ml: '15%',
+                    mb: 1,
+                    fontSize: '20px',
+                }}
+            >
+                Price: {post?.price}$
+            </Typography>
+
             <Box
                 sx={{
                     display: 'flex',
@@ -262,20 +274,30 @@ const PostDetails = () => {
                                         }}
                                     />
                                 )}
-                                {checkProductInCart(postForCart.id) ? (
-                                    <ShoppingCartIcon
-                                        sx={{ ml: 1 }}
-                                        onClick={() => {
-                                            addProductToCart(postForCart);
-                                        }}
-                                    />
+                                {postForCart.price == 'sold' ? (
+                                    <RemoveShoppingCartIcon sx={{ ml: 1 }} />
                                 ) : (
-                                    <ShoppingCartOutlinedIcon
-                                        sx={{ ml: 1 }}
-                                        onClick={() => {
-                                            addProductToCart(postForCart);
-                                        }}
-                                    />
+                                    <>
+                                        {checkProductInCart(postForCart.id) ? (
+                                            <ShoppingCartIcon
+                                                sx={{ ml: 1 }}
+                                                onClick={() => {
+                                                    addProductToCart(
+                                                        postForCart
+                                                    );
+                                                }}
+                                            />
+                                        ) : (
+                                            <ShoppingCartOutlinedIcon
+                                                sx={{ ml: 1 }}
+                                                onClick={() => {
+                                                    addProductToCart(
+                                                        postForCart
+                                                    );
+                                                }}
+                                            />
+                                        )}
+                                    </>
                                 )}
                             </Box>
                             <Box sx={{ display: 'flex' }}>

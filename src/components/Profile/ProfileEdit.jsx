@@ -5,8 +5,8 @@ import { useAuth } from '../../contexts/AuthContextProvider';
 import { useUsers } from '../../contexts/UsersContextProvider';
 
 const ProfileEdit = () => {
-    const { users, updateUser } = useUsers();
-    const { user } = useAuth();
+    const { users, updateUser, deleteUser } = useUsers();
+    const { user, handleLogout } = useAuth();
     const userSession = users.find((oneUser) => oneUser.email === user.email);
     const [updatedUser, setUpdatedUser] = useState({ ...userSession });
     useEffect(() => {
@@ -135,6 +135,20 @@ const ProfileEdit = () => {
                     sx={{ color: 'black', backgroundColor: 'white', margin: 1 }}
                 >
                     edit
+                </Button>
+                <Button
+                    onClick={() => {
+                        deleteUser(userSession.id);
+                        handleLogout();
+                        navigate(`/auth`);
+                    }}
+                    sx={{
+                        color: 'black',
+                        backgroundColor: '#fff',
+                        margin: 1,
+                    }}
+                >
+                    delete account
                 </Button>
             </Box>
         </Box>

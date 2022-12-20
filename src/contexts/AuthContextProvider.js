@@ -14,10 +14,6 @@ const AuthContextProvider = ({ children }) => {
     const [errorMsg, setErrorMsg] = useState('');
     const [hasAccount, setHasAccount] = useState('');
 
-    const clearInputs = () => {
-        setEmail('');
-        setPassword('');
-    };
     const navigate = useNavigate();
     const handleRegister = () => {
         setErrorMsg('');
@@ -73,6 +69,17 @@ const AuthContextProvider = ({ children }) => {
         authListener();
     }, []);
 
+    const forgetPassword = () => {
+        fire.auth()
+            .sendPasswordResetEmail(email)
+            .then(() => {
+                alert('Password reset mail sent');
+            })
+            .catch(() => {
+                alert('Invalid mail or user not found');
+            });
+    };
+
     const values = {
         email,
         password,
@@ -88,6 +95,7 @@ const AuthContextProvider = ({ children }) => {
         handleLogin,
         handleLogout,
         handleRegister,
+        forgetPassword,
     };
     return (
         <authContext.Provider value={values}>{children}</authContext.Provider>

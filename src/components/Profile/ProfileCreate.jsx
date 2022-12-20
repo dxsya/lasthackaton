@@ -20,6 +20,7 @@ const Profile = () => {
         posts: [],
         rating: [],
         email: '',
+        buys: [],
     });
 
     const handleInp = (e) => {

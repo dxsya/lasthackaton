@@ -6,15 +6,10 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useAuth } from '../../contexts/AuthContextProvider';
-import { useNavigate } from 'react-router-dom';
 // import AuthRightForm from "./AuthRightForm";
 
-const theme = createTheme();
-
 export default function Auth() {
-    const navigate = useNavigate();
     const {
         email,
         password,
@@ -25,6 +20,7 @@ export default function Auth() {
         setHasAccount,
         handleLogin,
         handleRegister,
+        forgetPassword,
     } = useAuth();
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -60,16 +56,14 @@ export default function Auth() {
                                 fontSize: 26,
                             }}
                             variant="h5"
-                        >
-                            Вход
-                        </Typography>
+                        ></Typography>
                         <Typography
                             sx={{
                                 fontWeight: 600,
                                 fontSize: { xs: 14, sm: 16 },
                             }}
                         >
-                            Почта
+                            Email
                         </Typography>
                         <TextField
                             required
@@ -87,7 +81,7 @@ export default function Auth() {
 
                         <Box sx={{ mt: 2 }}>
                             <Typography sx={{ fontWeight: 600, fontSize: 14 }}>
-                                Пароль
+                                Password
                             </Typography>
                             <TextField
                                 required
@@ -124,12 +118,14 @@ export default function Auth() {
                                     backgroundColor: 'white',
                                     height: '55px',
                                     marginBottom: '20px',
+                                    color: 'black',
+                                    transition: '1000s',
                                 }}
                                 onClick={() => {
                                     handleLogin();
                                 }}
                             >
-                                Войти
+                                LogIn
                             </Button>
                         ) : (
                             <Button
@@ -140,15 +136,17 @@ export default function Auth() {
                                 sx={{
                                     mt: 3,
                                     fontWeight: 600,
-                                    backgroundColor: '#white',
+                                    backgroundColor: 'white',
                                     height: '55px',
                                     marginBottom: '20px',
+                                    color: 'black',
+                                    transition: '1000s',
                                 }}
                                 onClick={() => {
                                     handleRegister();
                                 }}
                             >
-                                Зарегистрироваться
+                                Register
                             </Button>
                         )}
 
@@ -161,37 +159,58 @@ export default function Auth() {
                         >
                             <Grid item>
                                 {hasAccount ? (
-                                    <Link
-                                        className="links"
-                                        sx={{
-                                            color: 'black',
-                                            marginBottom: '100px',
-                                        }}
-                                        href="#"
-                                        variant="body2"
-                                        onClick={() =>
-                                            setHasAccount(!hasAccount)
-                                        }
-                                    >
-                                        {
-                                            'Нет аккаунта? Зарегистрируйтесь прямо сейчас'
-                                        }
-                                    </Link>
+                                    <Box sx={{ textAlign: 'center' }}>
+                                        <Link
+                                            className="links"
+                                            sx={{
+                                                color: 'black',
+                                                marginBottom: '100px',
+                                                color: 'white',
+                                            }}
+                                            variant="body2"
+                                            onClick={() =>
+                                                setHasAccount(!hasAccount)
+                                            }
+                                        >
+                                            {'Dont have account? Register now!'}
+                                        </Link>
+                                        <Link
+                                            variant="body2"
+                                            sx={{
+                                                display: 'block',
+                                                color: 'white',
+                                            }}
+                                        >
+                                            Forgot Password?
+                                        </Link>
+                                    </Box>
                                 ) : (
-                                    <Link
-                                        className="links"
-                                        sx={{
-                                            color: 'black',
-                                            marginBottom: '100px',
-                                        }}
-                                        href="#"
-                                        variant="body2"
-                                        onClick={() =>
-                                            setHasAccount(!hasAccount)
-                                        }
-                                    >
-                                        {'Уже есть аккаунт? Войдите'}
-                                    </Link>
+                                    <Box sx={{ textAlign: 'center' }}>
+                                        <Link
+                                            variant="body2"
+                                            className="links"
+                                            sx={{
+                                                color: 'black',
+                                                marginBottom: '100px',
+                                                color: 'white',
+                                            }}
+                                            onClick={() =>
+                                                setHasAccount(!hasAccount)
+                                            }
+                                        >
+                                            {'Already have account? Log In!'}
+                                        </Link>
+                                        <Link
+                                            variant="body2"
+                                            sx={{
+                                                display: 'block',
+                                                color: 'white',
+                                            }}
+                                            onClick={() => forgetPassword()}
+                                        >
+                                            Forgot Password?
+                                        </Link>
+                                    </Box>
                                 )}
                             </Grid>
                         </Grid>

@@ -1,13 +1,15 @@
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useUsers } from '../../contexts/UsersContextProvider';
 import PostFeed from './PostFeed';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const Feed = () => {
-    const { users } = useUsers();
+    const { users, usersPagination } = useUsers();
     users.filter((user) => user.email !== undefined);
-
+    useEffect(() => {
+        usersPagination();
+    }, []);
     return (
         <>
             {users ? (

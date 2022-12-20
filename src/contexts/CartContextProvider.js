@@ -4,7 +4,7 @@ import {
     calcSubPrice,
     calcTotalPrice,
     getProductCountInCart,
-} from '../helpers/functions';
+} from '../helpers/functionsHelp';
 
 const cartContext = createContext();
 export function useCart() {
@@ -79,24 +79,6 @@ const CartContextProvider = ({ children }) => {
             payload: cart,
         });
     };
-    const changeProductCount = (count, id) => {
-        let cart = JSON.parse(localStorage.getItem('cart'));
-
-        cart.posts = cart.posts.map((product) => {
-            if (product.item.id == id) {
-                product.count = count;
-                product.subPrice = calcSubPrice(product);
-            }
-            return product;
-        });
-        cart.totalPrice = calcTotalPrice(cart.posts);
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        dispatch({
-            type: CART.GET_CART,
-            payload: cart,
-        });
-    };
 
     function deleteCartProduct(id) {
         let cart = JSON.parse(localStorage.getItem('cart'));
@@ -125,7 +107,6 @@ const CartContextProvider = ({ children }) => {
     }
 
     const values = {
-        changeProductCount,
         checkProductInCart,
         getCart,
         addProductToCart,

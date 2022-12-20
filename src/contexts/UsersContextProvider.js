@@ -12,7 +12,7 @@ import {
     orderBy,
     startAt,
 } from 'firebase/firestore';
-import { db } from '../fire';
+import fire, { db } from '../fire';
 import { ACTIONS } from '../helpers/consts';
 
 const usersContext = createContext();
@@ -38,6 +38,10 @@ const UsersContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, INIT_STATE);
 
     const usersCollectionRef = collection(db, 'users');
+
+    async function usersPagination() {
+        // const data = await getDocs(usersCollectionRef).limit(3);
+    }
 
     async function getUsers(qRef) {
         const q = query(
@@ -79,6 +83,12 @@ const UsersContextProvider = ({ children }) => {
         getUsers();
     }
 
+    async function deleteUser(id) {
+        const userDocRef = doc(db, 'users', id);
+        await deleteDoc(userDocRef);
+        getUsers();
+    }
+
     const values = {
         createUser,
         getUsers,
@@ -86,6 +96,8 @@ const UsersContextProvider = ({ children }) => {
         getUserInfo,
         userInfo: state.userInfo,
         updateUser,
+        usersPagination,
+        deleteUser,
     };
     return (
         <usersContext.Provider value={values}>{children}</usersContext.Provider>

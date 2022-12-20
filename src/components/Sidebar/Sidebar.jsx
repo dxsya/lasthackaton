@@ -21,10 +21,6 @@ const navigations = [
         link: '/',
         name: 'интересное',
     },
-    // {
-    //     link: '/addContent',
-    //     name: 'создать',
-    // },
 ];
 
 const Sidebar = () => {

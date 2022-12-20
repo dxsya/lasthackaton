@@ -9,7 +9,6 @@ import Post from '../Post/Post';
 import Followers from './Followers';
 import Follows from './Follows';
 import ProfileRating from './ProfileRating';
-import { calcAverageRating } from '../../helpers/functions';
 
 const ProfileShow = () => {
     const { userInfo, getUserInfo, users, getUsers, updateUser } = useUsers();

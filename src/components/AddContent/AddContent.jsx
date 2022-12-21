@@ -106,7 +106,7 @@ const AddContent = () => {
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    width: '60%',
+                    width: '80%',
                     height: '100%',
                     margin: 'auto',
                     justifyContent: 'center',
@@ -117,7 +117,7 @@ const AddContent = () => {
                     placeholder="price"
                     sx={{
                         background: 'white',
-                        width: '60%',
+                        width: '80%',
                         margin: '2% auto',
                         '& .MuiOutlinedInput-root': {
                             '&.Mui-focused fieldset': {
@@ -133,8 +133,8 @@ const AddContent = () => {
                     placeholder="descr"
                     sx={{
                         background: 'white',
-                        width: '60%',
-                        margin: '2% auto',
+                        width: '80%',
+                        margin: '1% auto',
                         '& .MuiOutlinedInput-root': {
                             '&.Mui-focused fieldset': {
                                 border: 'none',
@@ -149,8 +149,8 @@ const AddContent = () => {
                     type="file"
                     sx={{
                         background: 'white',
-                        width: '60%',
-                        margin: '2% auto',
+                        width: '80%',
+                        margin: '1% auto',
                         '& .MuiOutlinedInput-root': {
                             '&.Mui-focused fieldset': {
                                 border: 'none',
@@ -163,8 +163,8 @@ const AddContent = () => {
                     <Button
                         sx={{
                             background: 'white',
-                            width: '60%',
-                            margin: '2% auto',
+                            width: '80%',
+                            margin: '1% auto',
                             color: 'black',
                         }}
                     >
@@ -178,8 +178,8 @@ const AddContent = () => {
                     <Button
                         sx={{
                             background: 'white',
-                            width: '60%',
-                            margin: '2% auto',
+                            width: '80%',
+                            margin: '1% auto',
                             color: 'black',
                         }}
                         onClick={() => {

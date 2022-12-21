@@ -4,7 +4,7 @@ export function getProductCountInCart() {
 }
 
 export const calcTotalPrice = (posts) => {
-    return posts.reduce((acc, curr) => {
+    return posts?.reduce((acc, curr) => {
         return acc + +curr.price;
     }, 0);
 };

@@ -9,6 +9,7 @@ import Post from '../Post/Post';
 import Followers from './Followers';
 import Follows from './Follows';
 import ProfileRating from './ProfileRating';
+import ProfileBuys from './ProfileBuys';
 
 const ProfileShow = () => {
     const { userInfo, getUserInfo, users, getUsers, updateUser } = useUsers();
@@ -78,19 +79,30 @@ const ProfileShow = () => {
     }
     //? FOLLOWS
     return (
-        <Box sx={{ backgroundColor: '#121212', height: '100vh' }}>
+        <Box sx={{ backgroundColor: '#121212', minHeight: '100vh' }}>
             {userInfo ? (
                 <>
                     <Box
                         sx={{
-                            width: '60%',
+                            width: {
+                                xs: '90%',
+                                sm: '88%',
+                                md: '70%',
+                                lg: '65%',
+                                xl: '60%',
+                            },
                             margin: '0 auto',
                             color: 'white',
                             display: 'flex',
                             pt: 5,
                         }}
                     >
-                        <Box sx={{ width: '30%' }}>
+                        <Box
+                            sx={{
+                                width: { xs: '40%', sm: '35%' },
+                                margin: 'auto',
+                            }}
+                        >
                             <img
                                 src={userInfo.avatar}
                                 alt=""
@@ -100,6 +112,7 @@ const ProfileShow = () => {
                                     borderRadius: '50%',
                                     border: '0.01rem solid #aeaeae',
                                 }}
+                                className="avatar"
                             />
                         </Box>
                         <Box sx={{ width: '70%', margin: '2% auto' }}>
@@ -173,6 +186,7 @@ const ProfileShow = () => {
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                 }}
+                                className="userInfo"
                             >
                                 <Typography>
                                     {userInfo.posts.length} posts
@@ -197,6 +211,7 @@ const ProfileShow = () => {
                                     userSession={userSession}
                                 />
                             </Box>
+                            <ProfileBuys buys={userInfo.buys} />
                         </Box>
                     </Box>
 

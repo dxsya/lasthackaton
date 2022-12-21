@@ -7,21 +7,9 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import { useUsers } from '../../contexts/UsersContextProvider';
 import BookmarkTwoToneIcon from '@mui/icons-material/BookmarkTwoTone';
 import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
-
-const navigations = [
-    {
-        link: '/',
-        name: 'главная',
-    },
-    {
-        link: '/',
-        name: 'поиск',
-    },
-    {
-        link: '/',
-        name: 'интересное',
-    },
-];
+import HomeIcon from '@mui/icons-material/Home';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 const Sidebar = () => {
     const { handleLogout, user } = useAuth();
@@ -38,64 +26,122 @@ const Sidebar = () => {
     return (
         <Box
             sx={{
-                width: '18%',
+                width: { xs: '10%' },
+                paddingLeft: { xs: 4, xm: 1, md: 1 },
+                paddingRight: { xs: 1, xm: 3, md: 3 },
                 backgroundColor: 'black',
                 color: 'white',
                 minHeight: 'max-content',
                 borderRight: '0.5px solid #aeaeae',
+                display: 'flex',
+                justifyContent: 'center',
             }}
         >
             <Box sx={{ position: 'fixed' }}>
-                <List sx={{}}>
-                    {navigations.map((item, index) => (
-                        <Typography
-                            key={index}
-                            onClick={() => navigate(item.link)}
-                        >
-                            {item.name}
-                        </Typography>
-                    ))}
-                </List>
+                <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
+                    <img
+                        src="https://i.pinimg.com/564x/8a/dd/1b/8add1bd9b6e562d6d9bc0777c584e2dd.jpg"
+                        alt=""
+                        width={'35px'}
+                    />
+                </Box>
+                <Box
+                    onClick={() => navigate(`/`)}
+                    sx={{ display: 'flex', mt: 5 }}
+                >
+                    <HomeIcon />
+                    <Typography
+                        sx={{
+                            display: { xs: 'none', sm: 'none', md: 'block' },
+                        }}
+                    >
+                        Feed
+                    </Typography>
+                </Box>
 
                 {user.email != undefined ? (
-                    <>
-                        <Typography
+                    <Box sx={{}}>
+                        <Box
                             onClick={() =>
                                 navigate(`/addContent/${userAuthorized?.id}`)
                             }
+                            sx={{ display: 'flex', mt: 5 }}
                         >
-                            создать
-                        </Typography>
-                        <Typography
+                            <AddBoxOutlinedIcon />
+                            <Typography
+                                sx={{
+                                    display: {
+                                        xs: 'none',
+                                        sm: 'none',
+                                        md: 'block',
+                                    },
+                                }}
+                            >
+                                Content
+                            </Typography>
+                        </Box>
+                        <Box
                             onClick={() => {
                                 if (users.length) {
                                     navigate(`/profile/${userAuthorized?.id}`);
                                 }
                             }}
+                            sx={{ display: 'flex', mt: 5 }}
                         >
-                            профиль
-                        </Typography>
-                        <ShoppingCartTwoToneIcon
+                            <AccountCircleOutlinedIcon />
+                            <Typography
+                                sx={{
+                                    display: {
+                                        xs: 'none',
+                                        sm: 'none',
+                                        md: 'block',
+                                    },
+                                }}
+                            >
+                                Profile
+                            </Typography>
+                        </Box>
+
+                        <Box
+                            sx={{ display: 'flex', mt: 5 }}
                             onClick={() => navigate('/cart')}
-                        />
-                        <BookmarkTwoToneIcon
+                        >
+                            <ShoppingCartTwoToneIcon />
+                            <Typography
+                                sx={{
+                                    display: {
+                                        xs: 'none',
+                                        sm: 'none',
+                                        md: 'block',
+                                    },
+                                }}
+                            >
+                                {' '}
+                                Cart
+                            </Typography>
+                        </Box>
+                        <Box
+                            sx={{ display: 'flex', mt: 5 }}
                             onClick={() => navigate('/wish')}
-                        />
-                    </>
+                        >
+                            <BookmarkTwoToneIcon />
+                            <Typography
+                                sx={{
+                                    display: {
+                                        xs: 'none',
+                                        sm: 'none',
+                                        md: 'block',
+                                    },
+                                }}
+                            >
+                                Saves
+                            </Typography>
+                        </Box>
+                    </Box>
                 ) : (
                     <></>
                 )}
-                <ListItem
-                    sx={{
-                        padding: {
-                            xs: '0 2px',
-                            sm: '0 4px',
-                            md: '0 8px',
-                            lg: '0 12px',
-                            xl: '0 14px',
-                        },
-                    }}
-                >
+                <Box>
                     {user ? (
                         <Box
                             onClick={handleLogout}
@@ -103,6 +149,7 @@ const Sidebar = () => {
                                 cursor: 'pointer',
                                 width: '24px',
                                 height: '24px',
+                                mt: 5,
                             }}
                         >
                             <LogoutOutlinedIcon sx={{ color: 'white' }} />
@@ -115,6 +162,7 @@ const Sidebar = () => {
                                     cursor: 'pointer',
                                     width: '24px',
                                     height: '24px',
+                                    mt: 5,
                                 }}
                             >
                                 <PersonOutlineOutlinedIcon
@@ -123,7 +171,7 @@ const Sidebar = () => {
                             </Box>
                         </Link>
                     )}
-                </ListItem>
+                </Box>
             </Box>
         </Box>
     );

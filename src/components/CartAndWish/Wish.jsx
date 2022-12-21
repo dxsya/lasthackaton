@@ -8,7 +8,7 @@ const Wish = () => {
         getWish();
     }, []);
 
-    let ourWish = wish.wishlist.map((item) => item.item);
+    let ourWish = wish?.wishlist?.map((item) => item.item);
     return (
         <Box
             sx={{
@@ -16,9 +16,10 @@ const Wish = () => {
                 padding: 2,
                 height: '96vh',
                 display: 'flex',
+                flexWrap: 'wrap',
             }}
         >
-            {ourWish.map((oneWish, index) => (
+            {ourWish?.map((oneWish, index) => (
                 <WishCard key={index} wish={oneWish} />
             ))}
         </Box>

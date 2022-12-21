@@ -18,7 +18,7 @@ const Cart = () => {
     }, []);
     const navigate = useNavigate();
     const userSession = users.find((oneUser) => oneUser.email === user.email);
-    let ourCart = cart.posts.map((item) => item.item);
+    let ourCart = cart?.posts.map((item) => item.item);
 
     function buyCart(users, cart) {
         let userBuys = { ...userSession };
@@ -35,8 +35,8 @@ const Cart = () => {
         }
         for (let i in fromWhoBuy) {
             let fromWhoBuyUser = { ...fromWhoBuy[i] };
+            buys.push({ ...fromWhoBuy[i].posts[cartIDs[i]] });
             let post = { ...fromWhoBuy[i].posts[cartIDs[i]], price: 'sold' };
-            buys.push(post);
             fromWhoBuyUser.posts[cartIDs[i]] = post;
             updateUser(fromWhoBuy[i].id, fromWhoBuyUser);
         }
@@ -61,9 +61,10 @@ const Cart = () => {
                         margin: '0 auto',
                         overflow: 'scroll',
                         justifyContent: 'space-between',
+                        flexWrap: 'wrap',
                     }}
                 >
-                    {ourCart.map((oneWish, index) => (
+                    {ourCart?.map((oneWish, index) => (
                         <WishCard key={index} wish={oneWish} />
                     ))}
                 </Box>

@@ -39,24 +39,46 @@ const UsersContextProvider = ({ children }) => {
 
     const usersCollectionRef = collection(db, 'users');
 
-    async function usersPagination() {
-        // const data = await getDocs(usersCollectionRef).limit(3);
+    async function usersSort(value) {
+        const data = await getDocs(usersCollectionRef);
+        let readyData = data.docs.map((item) => ({
+            ...item.data(),
+            id: item.id,
+        }));
+        if (value == 'follows') {
+            readyData.sort((a, b) => a.follows?.length - b.follows?.length);
+            dispatch({
+                type: ACTIONS.GET_USERS,
+                payload: readyData,
+            });
+            console.log(readyData);
+        } else if (value == 'followers') {
+            dispatch({
+                type: ACTIONS.GET_USERS,
+                payload: readyData.sort(
+                    (a, b) => a.followers?.length - b.followers?.length
+                ),
+            });
+            console.log(
+                readyData.sort(
+                    (a, b) => a.followers?.length - b.followers?.length
+                )
+            );
+        } else if (value == 'posts') {
+            dispatch({
+                type: ACTIONS.GET_USERS,
+                payload: readyData.sort(
+                    (a, b) => a.posts?.length - b.posts?.length
+                ),
+            });
+            console.log(
+                readyData.sort((a, b) => a.posts?.length - b.posts?.length)
+            );
+        }
     }
 
-    async function getUsers(qRef) {
-        const q = query(
-            usersCollectionRef,
-            // where('nick', '==', 'dosya')
-            // where('email', '==', 'dxd@gmail.com'),
-            // where('description', '==', '0nlyT35Td')
-            orderBy('price', 'desc')
-        );
+    async function getUsers() {
         const data = await getDocs(usersCollectionRef);
-        // const data2 = await getDocs(q);
-        // console.log(
-        //     data2.docs.map((item) => ({ ...item.data(), id: item.id }))
-        // );
-
         dispatch({
             type: ACTIONS.GET_USERS,
             payload: data.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
@@ -96,7 +118,7 @@ const UsersContextProvider = ({ children }) => {
         getUserInfo,
         userInfo: state.userInfo,
         updateUser,
-        usersPagination,
+        usersSort,
         deleteUser,
     };
     return (

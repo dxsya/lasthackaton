@@ -1,17 +1,27 @@
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUsers } from '../../contexts/UsersContextProvider';
 import PostFeed from './PostFeed';
+import PostFeedForSort from './PostFeedForSort';
+
 import CircularProgress from '@mui/material/CircularProgress';
+import {
+    Configure,
+    Hits,
+    Pagination,
+    SearchBox,
+} from 'react-instantsearch-dom';
+import { MenuItem, Select } from '@mui/material';
 
 const Feed = () => {
-    const { users, usersPagination } = useUsers();
-    users.filter((user) => user.email !== undefined);
+    const { users, usersSort } = useUsers();
+    const [sort, setSort] = useState('');
     useEffect(() => {
-        usersPagination();
-    }, []);
+        usersSort(sort);
+    }, [sort]);
+    users.filter((user) => user.email !== undefined);
     return (
-        <>
+        <Box>
             {users ? (
                 <Box
                     sx={{
@@ -20,13 +30,83 @@ const Feed = () => {
                     }}
                 >
                     <Box sx={{ width: '90%', margin: '0 auto', paddingY: 4 }}>
-                        {users.map((user, index) => {
-                            if (user.email == undefined) {
-                                return null;
-                            } else {
-                                return <PostFeed key={index} user={user} />;
-                            }
-                        })}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                width: { md: '70%', xs: '100%', xm: '85%' },
+                                justifyContent: 'space-between',
+                                flexDirection: 'row-reverse',
+                                margin: '0 auto',
+                            }}
+                            className="searchAndFilter"
+                        >
+                            <Select
+                                onChange={(e) => setSort(e.target.value)}
+                                value={sort}
+                                sx={{
+                                    color: 'white',
+                                    backgroundColor: 'white',
+                                    height: '42px',
+                                    width: '150px',
+                                }}
+                            >
+                                <MenuItem
+                                    sx={{ color: 'black' }}
+                                    value={'posts'}
+                                >
+                                    posts
+                                </MenuItem>
+                                <MenuItem
+                                    sx={{ color: 'black' }}
+                                    value={'followers'}
+                                >
+                                    followers
+                                </MenuItem>
+                                <MenuItem
+                                    sx={{ color: 'black' }}
+                                    value={'follows'}
+                                >
+                                    follows
+                                </MenuItem>
+                            </Select>
+                            <SearchBox
+                                translations={{
+                                    placeholder: 'search for users',
+                                }}
+                            />
+                        </Box>
+                        <Configure hitsPerPage={3} />
+
+                        {sort == '' ? (
+                            <Hits id="hit" hitComponent={PostFeed} />
+                        ) : (
+                            <>
+                                <Box
+                                    sx={{
+                                        width: '90%',
+                                        margin: '0 auto',
+                                        paddingY: 4,
+                                    }}
+                                >
+                                    {users.map((user, index) => {
+                                        if (user.email == undefined) {
+                                            return null;
+                                        } else {
+                                            return (
+                                                <PostFeedForSort
+                                                    key={index}
+                                                    user={user}
+                                                />
+                                            );
+                                        }
+                                    })}
+                                </Box>
+                            </>
+                        )}
+                        <Pagination
+                            className="pagination"
+                            defaultRefinement={2}
+                        />
                     </Box>
                 </Box>
             ) : (
@@ -41,7 +121,7 @@ const Feed = () => {
                     />
                 </Box>
             )}
-        </>
+        </Box>
     );
 };
 
